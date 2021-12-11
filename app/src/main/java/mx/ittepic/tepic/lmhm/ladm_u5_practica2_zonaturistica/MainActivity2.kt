@@ -93,9 +93,31 @@ class MainActivity2 : AppCompatActivity() {
             }
         }//if Ley
 
+        if(nombre == "Megacable"){
+            //imagen 1
+            var storeRef  = FirebaseStorage.getInstance().reference.child(nombre + "/imagen1.jpeg")
+            storeRef.getFile(localfile).addOnSuccessListener {
+                Toast.makeText(this,"nombre es ${nombre}",Toast.LENGTH_LONG).show()
+                val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+                img1.setImageBitmap(bitmap)
+            }
+
+            //Imagen 2
+            storeRef = FirebaseStorage.getInstance().reference.child(nombre + "/imagen2.jpeg")
+            storeRef.getFile(localfile).addOnSuccessListener {
+                val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+                img2.setImageBitmap(bitmap)
+            }
+
+            //imagen 3
+            storeRef = FirebaseStorage.getInstance().reference.child(nombre + "/imagen3.jpeg")
+            storeRef.getFile(localfile).addOnSuccessListener {
+                val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+                img3.setImageBitmap(bitmap)
+            }
+        }//if Megacable
 
 
         txtDescripcion.setText(descripcion)
-
     }//onCreate
 }//class
