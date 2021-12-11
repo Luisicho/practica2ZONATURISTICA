@@ -38,10 +38,10 @@ class MainActivity2 : AppCompatActivity() {
             }
 
             //imagen 3
-            storeRef = FirebaseStorage.getInstance().reference.child(nombre + "/banorte3.png")
-            storeRef.getFile(File.createTempFile("tempImage","png")).addOnSuccessListener {
+            storeRef = FirebaseStorage.getInstance().reference.child(nombre + "/banorte3.jpg")
+            storeRef.getFile(File.createTempFile("tempImage","jpg")).addOnSuccessListener {
                 val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
-                img2.setImageBitmap(bitmap)
+                img3.setImageBitmap(bitmap)
             }
         }//if Banorte
 
