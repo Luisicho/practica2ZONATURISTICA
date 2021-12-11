@@ -1,6 +1,7 @@
 package mx.ittepic.tepic.lmhm.ladm_u5_practica2_zonaturistica
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
@@ -122,6 +123,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, AdapterView.OnItem
     override fun onItemClick(p0: AdapterView<*>, p1: View, position: Int, p3: Long) {
         var item = findViewById<ListView>(R.id.lista).getItemAtPosition(position).toString()
         Toast.makeText(this,"Click en ${item}",Toast.LENGTH_LONG).show()
+        var nombre = item.split("\n")
+        baseRemota.collection("LEY").document(nombre[0]).addSnapshotListener { value, error ->
+            if(value!!.getString("nombre")!=null){
+                val extra = Intent(this,MainActivity2::class.java).putExtra("nombre",value.getString("nombre"))
+                extra.putExtra("descripcion",value.getString("Descripcion"))
+                startActivity(extra)
+            }
+
+        }
+
+        //Envia al MainActivity2 el nombre seleccionado en el item.
 
     }
 }
