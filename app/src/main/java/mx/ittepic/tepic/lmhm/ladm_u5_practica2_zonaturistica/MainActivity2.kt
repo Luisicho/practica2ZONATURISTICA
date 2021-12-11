@@ -18,15 +18,23 @@ class MainActivity2 : AppCompatActivity() {
         //Recuperados el dato enviado por el MainActivy1
         var nombre = intent.extras!!.getString("nombre").toString()
         var descripcion = intent.extras!!.getString("descripcion").toString()
-
+        val localfile = File.createTempFile("tempImage","jpeg")
         if(nombre == "Banorte"){
-            val storeRef  = FirebaseStorage.getInstance().reference.child(nombre + "/banorte1.*")
-            val localfile = File.createTempFile("tempImage","*")
+            var storeRef  = FirebaseStorage.getInstance().reference.child(nombre + "/banorte1.jpeg")
             storeRef.getFile(localfile).addOnSuccessListener {
                 val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
                 img1.setImageBitmap(bitmap)
             }
-            txtDescripcion.setText(descripcion)
+            storeRef = FirebaseStorage.getInstance().reference.child(nombre + "/banorte2.jpeg")
+            storeRef.getFile(localfile).addOnSuccessListener {
+                val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+                img2.setImageBitmap(bitmap)
+            }
+
+
         }
+
+        txtDescripcion.setText(descripcion)
+
     }//onCreate
 }//class
