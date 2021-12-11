@@ -17,16 +17,20 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
+import com.google.android.gms.maps.model.MarkerOptions
+
+
+
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback, AdapterView.OnItemClickListener {
 
     var baseRemota = FirebaseFirestore.getInstance()
     var posicion = ArrayList<Data>()
-    var siPermiso = 98
+    var siPermiso = 1
     lateinit var locacion : LocationManager
     var c1 : Location = Location("")
     var c2 : Location = Location("")
-    val mMap: GoogleMap? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -35,11 +39,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, AdapterView.OnItem
         mapFragment!!.getMapAsync(this)
         if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),siPermiso)
-        } else {
-            locacion = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            var oyente = Oyente(this)
-            locacion.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, oyente)
         }
+
         baseRemota.collection("LEY")
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 if(firebaseFirestoreException != null){
@@ -81,6 +82,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, AdapterView.OnItem
                     findViewById<TextView>(R.id.ubicacion).setText(r)
                 }
         }
+        locacion = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        var oyente = Oyente(this)
+        locacion.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, oyente)
     }
 
     override fun onMapReady(p0: GoogleMap) {
@@ -88,6 +92,29 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, AdapterView.OnItem
 
         // Add a marker in ley and move the camera
         val ley = LatLng(21.493124, -104.884021)
+        val HM = LatLng(21.492896, -104.883717)
+        val TP = LatLng(21.493609, -104.882499)
+        val Meg = LatLng(21.492842, -104.882929)
+        val Ban = LatLng(21.492259, -104.883163)
+        val PA = LatLng(21.493124, -104.884021)
+        mMap.addMarker(MarkerOptions()
+            .position(ley)
+            .title("Ley"))
+        mMap.addMarker(MarkerOptions()
+            .position(PA)
+            .title("Plaza alica"))
+        mMap.addMarker(MarkerOptions()
+            .position(Ban)
+            .title("Banorte"))
+        mMap.addMarker(MarkerOptions()
+            .position(Meg)
+            .title("Megacable"))
+        mMap.addMarker(MarkerOptions()
+            .position(TP)
+            .title("Tower Pizza"))
+        mMap.addMarker(MarkerOptions()
+            .position(HM)
+            .title("Hasi & Maki"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(ley))
         mMap.uiSettings.isZoomControlsEnabled = true
     }
