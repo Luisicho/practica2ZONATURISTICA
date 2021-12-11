@@ -39,8 +39,8 @@ class MainActivity2 : AppCompatActivity() {
             }
 
             //imagen 3
-            storeRef = FirebaseStorage.getInstance().reference.child(nombre + "/banorte3.jpg")
-            storeRef.getFile(File.createTempFile("tempImage","jpg")).addOnSuccessListener {
+            storeRef = FirebaseStorage.getInstance().reference.child(nombre + "/banorte3.jpeg")
+            storeRef.getFile(localfile).addOnSuccessListener {
                 val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
                 img3.setImageBitmap(bitmap)
             }
