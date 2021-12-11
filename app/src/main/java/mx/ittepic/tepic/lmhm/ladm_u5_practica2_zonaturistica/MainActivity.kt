@@ -50,6 +50,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, AdapterView.OnItem
                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE),siPermiso)
 
+        }else{
+            ActivityCompat.requestPermissions(this, arrayOf(
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE),siPermiso)
         }
         locacion = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         var oyente = Oyente(this)
@@ -134,7 +140,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, AdapterView.OnItem
 
     override fun onItemClick(p0: AdapterView<*>, p1: View, position: Int, p3: Long) {
         var item = findViewById<ListView>(R.id.lista).getItemAtPosition(position).toString()
-        Toast.makeText(this,"Click en ${item}",Toast.LENGTH_LONG).show()
+        //Toast.makeText(this,"Click en ${item}",Toast.LENGTH_LONG).show()
         var nombre = item.split("\n")
         baseRemota.collection("LEY").document(nombre[0]).addSnapshotListener { value, error ->
             if(value!!.getString("nombre")!=null){

@@ -24,7 +24,6 @@ class MainActivity2 : AppCompatActivity() {
         if(nombre == "Banorte"){
             var storeRef  = FirebaseStorage.getInstance().reference.child(nombre + "/banorte1.jpeg")
             storeRef.getFile(localfile).addOnSuccessListener {
-                Toast.makeText(this,"nombre es ${nombre}",Toast.LENGTH_LONG).show()
                 val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
                 img1.setImageBitmap(bitmap)
             }
