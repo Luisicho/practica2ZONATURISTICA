@@ -22,19 +22,29 @@ class MainActivity2 : AppCompatActivity() {
         val localfile = File.createTempFile("tempImage","jpeg")
 
         if(nombre == "Banorte"){
+
+            //imagen 1
             var storeRef  = FirebaseStorage.getInstance().reference.child(nombre + "/banorte1.jpeg")
             storeRef.getFile(localfile).addOnSuccessListener {
                 Toast.makeText(this,"nombre es ${nombre}",Toast.LENGTH_LONG).show()
                 val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
                 img1.setImageBitmap(bitmap)
             }
+
+            //Imagen 2
             storeRef = FirebaseStorage.getInstance().reference.child(nombre + "/banorte2.jpeg")
             storeRef.getFile(localfile).addOnSuccessListener {
                 val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
                 img2.setImageBitmap(bitmap)
             }
 
-        }
+            //imagen 3
+            storeRef = FirebaseStorage.getInstance().reference.child(nombre + "/banorte3.png")
+            storeRef.getFile(File.createTempFile("tempImage","png")).addOnSuccessListener {
+                val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+                img2.setImageBitmap(bitmap)
+            }
+        }//if Banorte
 
         txtDescripcion.setText(descripcion)
 
