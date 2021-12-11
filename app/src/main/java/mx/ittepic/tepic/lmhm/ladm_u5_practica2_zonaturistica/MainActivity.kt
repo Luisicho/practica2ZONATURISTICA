@@ -36,6 +36,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, AdapterView.OnItem
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val btnIntegrantes= findViewById<Button>(R.id.btnIntegrantes)
+
+        btnIntegrantes.setOnClickListener{
+            AlertDialog.Builder(this).setTitle("INTEGRANTES: ")
+                .setMessage("Enrique Alonso Miramontes Tiznado\n" +
+                        "Luis Miguel Hernández Macías\n"+
+                        "Susana Carolina Plata Vazquez\n"+
+                        "Adalberto Martinez Rodriguez")
+                .setPositiveButton("OK") { d, i ->
+                }.show()
+        }
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
