@@ -50,9 +50,22 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, AdapterView.OnItem
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
-        if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),siPermiso)
+        if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            &&ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            &&ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+            &&ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+        ){
+            ActivityCompat.requestPermissions(this, arrayOf(
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE),siPermiso)
+
         }
+        locacion = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        var oyente = Oyente(this)
+        locacion.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, oyente)
+
 
         baseRemota.collection("LEY")
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
@@ -95,9 +108,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, AdapterView.OnItem
                     findViewById<TextView>(R.id.ubicacion).setText(r)
                 }
         }
-        locacion = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        var oyente = Oyente(this)
-        locacion.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, oyente)
+
     }
 
     override fun onMapReady(p0: GoogleMap) {
@@ -148,16 +159,30 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, AdapterView.OnItem
         //Envia al MainActivity2 el nombre seleccionado en el item.
 
     }
+
 }
 
 class Oyente(puntero:MainActivity) : LocationListener {
     var p = puntero
+    var baseRemota = FirebaseFirestore.getInstance()
     override fun onLocationChanged(location: Location) {
         p.findViewById<TextView>(R.id.coordenadasView).setText("Coordenadas:\n${location.latitude}, ${location.longitude}")
         var posicionActual = GeoPoint(location.latitude, location.longitude)
         for (item in p.posicion) {
             if (item.estoyEn(posicionActual)) {
                 p.findViewById<TextView>(R.id.ubicado).setText("Usted se encuentra en:\n${item.nombre}")
+                AlertDialog.Builder(p)
+                    .setMessage("Quieres ver mas informacion de la locacion?")
+                    .setPositiveButton("SI"){i,v->
+                        baseRemota.collection("LEY").document(item.nombre).addSnapshotListener { value, error ->
+                            if(value!!.getString("nombre")!=null){
+                                val extra = Intent(p,MainActivity2::class.java).putExtra("nombre",value.getString("nombre"))
+                                extra.putExtra("descripcion",value.getString("Descripcion"))
+                                p.startActivity(extra)
+                            }
+                        }
+                    }
+                    .setNegativeButton("NO"){i,v->}
             }
         }
     }
