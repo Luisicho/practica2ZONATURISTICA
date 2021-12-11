@@ -4,6 +4,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_main2.*
@@ -20,9 +21,11 @@ class MainActivity2 : AppCompatActivity() {
         var descripcion = intent.extras!!.getString("descripcion").toString()
 
         if(nombre == "Banorte"){
-            val storeRef  = FirebaseStorage.getInstance().reference.child(nombre + "/banorte1.*")
-            val localfile = File.createTempFile("tempImage","*")
+
+            val storeRef  = FirebaseStorage.getInstance().reference.child(nombre + "/banorte1.jpeg")
+            val localfile = File.createTempFile("tempImage","jpeg")
             storeRef.getFile(localfile).addOnSuccessListener {
+                Toast.makeText(this,"nombre es ${nombre}",Toast.LENGTH_LONG).show()
                 val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
                 img1.setImageBitmap(bitmap)
             }
