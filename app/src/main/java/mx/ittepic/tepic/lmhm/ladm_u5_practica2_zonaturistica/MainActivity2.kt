@@ -50,7 +50,6 @@ class MainActivity2 : AppCompatActivity() {
             //imagen 1
             var storeRef  = FirebaseStorage.getInstance().reference.child(nombre + "/imagen1.jpeg")
             storeRef.getFile(localfile).addOnSuccessListener {
-                Toast.makeText(this,"nombre es ${nombre}",Toast.LENGTH_LONG).show()
                 val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
                 img1.setImageBitmap(bitmap)
             }
